@@ -1,11 +1,11 @@
 {
-  "name": "nginx",
+  "name": "heroku-server",
   "version": "1.0.0",
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
     "test": "node benchmark.js",
-    "start": "0x index.js"
+    "start": "node index.js"
   },
   "keywords": [],
   "author": "",
