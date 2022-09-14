@@ -1,4 +1,4 @@
-require('dotenv').config();
+const dotenv = require('dotenv')
 const express = require('express')
 const session = require('express-session')
 const passport = require('passport')
@@ -18,6 +18,7 @@ const cpus = os.cpus();
 const port = Number(process.env.PORT) || 3000;
 const iscluster = process.argv[3] == "cluster";
 const logger = require('./config/winston.js')
+dotenv.config()
 
 app.engine(".hbs", exphbs({ extname: ".hbs", defaultLayout: "main.hbs" }));
 app.set("view engine", ".hbs");
@@ -216,22 +217,26 @@ if (iscluster && cluster.isPrimary) {
       cluster.fork();
     });
   } else {
-    app.use("/", rutas);
-
-    const URL = process.env.URL_MONGO;
-
-    mongoose.connect( URL,{ useNewUrlParser: true, useUnifiedTopology: true }, (err) => {
+      async function Main () {
+        app.use("/", rutas);
         
-        console.log('BASE DE DATOS CONECTADA')
+        const URL = process.env.URL_MONGO;
         
-        app.listen(port, () => {
-            if(!err){
-                console.log(`Server listening port ${port} - Worker: ${process.pid}`)
-            }else {
-                console.log('Error al escuchar el puerto')
-            }
+        await mongoose.connect( URL,{ useNewUrlParser: true, useUnifiedTopology: true }, (err) => {
+            
+            console.log('BASE DE DATOS CONECTADA')
+            
+            app.listen(port, () => {
+                if(!err){
+                    console.log(`Server listening port ${port} - Worker: ${process.pid}`)
+                }else {
+                    console.log('Error al escuchar el puerto')
+                }
+            })
         })
-    })
+    }
+
+    Main()
 }
     
 
