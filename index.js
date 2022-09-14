@@ -224,7 +224,7 @@ if (iscluster && cluster.isPrimary) {
         
         console.log('BASE DE DATOS CONECTADA')
         
-        app.listen(port, (err) => {
+        app.listen(port, () => {
             if(!err){
                 console.log(`Server listening port ${port} - Worker: ${process.pid}`)
             }else {
