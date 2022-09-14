@@ -217,11 +217,23 @@ if (iscluster && cluster.isPrimary) {
     });
   } else {
     app.use("/", rutas);
+
+    const URL = process.env.URL_MONGO;
+
+    mongoose.connect( URL,{ useNewUrlParser: true, useUnifiedTopology: true }, (err) => {
+        
+        console.log('BASE DE DATOS CONECTADA')
+        
+        app.listen(port, (err) => {
+            if(!err){
+                console.log(`Server listening port ${port} - Worker: ${process.pid}`)
+            }else {
+                console.log('Error al escuchar el puerto')
+            }
+        })
+    })
+}
     
-    app.listen(port, () => {
-      console.log(`Server listening port ${port} - Worker: ${process.pid}`);
-    });
-  }
 
 app.use((req, res, next)=>{
 const { url, method } = req;
