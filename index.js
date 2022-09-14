@@ -217,12 +217,11 @@ if (iscluster && cluster.isPrimary) {
       cluster.fork();
     });
   } else {
-      async function Main () {
         app.use("/", rutas);
         
         const URL = process.env.URL_MONGO;
         
-        await mongoose.connect( URL,{ useNewUrlParser: true, useUnifiedTopology: true }, (err) => {
+        mongoose.connect( URL,{ useNewUrlParser: true, useUnifiedTopology: true }, (err) => {
             
             console.log('BASE DE DATOS CONECTADA')
             
@@ -236,11 +235,7 @@ if (iscluster && cluster.isPrimary) {
         })
     }
 
-    Main()
-}
-    
-
-app.use((req, res, next)=>{
+    app.use((req, res, next)=>{
 const { url, method } = req;
 logger.warn(`Método ${method} URL ${url} inexistente`);
 }
