@@ -1,4 +1,4 @@
-require('dotenv').config()
+require('dotenv').config();
 const express = require('express')
 const session = require('express-session')
 const passport = require('passport')
@@ -15,10 +15,8 @@ const compression = require('compression')
 const os = require('os');
 const cluster = require("cluster");
 const cpus = os.cpus();
-const port = Number(process.env.PORT) || 3000;
 const iscluster = process.argv[3] == "cluster";
 const logger = require('./config/winston.js')
-
 
 app.engine(".hbs", exphbs({ extname: ".hbs", defaultLayout: "main.hbs" }));
 app.set("view engine", ".hbs");
@@ -26,7 +24,6 @@ app.set("view engine", ".hbs");
 app.use(express.static(__dirname + "/views"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
 
 app.use(
     session({
@@ -52,7 +49,6 @@ function hashPassword(password) {
 function isValidPassword(reqPassword, hashedPassword) {
     return bcrypt.compareSync(reqPassword, hashedPassword);
 }
-
  
 const registerStrategy = new LocalStrategy(
     {passReqToCallback: true},
@@ -220,18 +216,28 @@ if (iscluster && cluster.isPrimary) {
         app.use("/", rutas);
         
         const URL = process.env.URL_MONGO;
-        
         mongoose.connect( URL,{ useNewUrlParser: true, useUnifiedTopology: true }, (err) => {
             
-            console.log('BASE DE DATOS CONECTADA')
+            if (iscluster && cluster.isPrimary) {
+                cpus.map(() => {
+                cluster.fork();
+                });
             
-            app.listen(port, () => {
-                if(!err){
-                    console.log(`Server listening port ${port} - Worker: ${process.pid}`)
-                }else {
-                    console.log('Error al escuchar el puerto')
-                }
-            })
+                cluster.on("exit", (worker) => {
+                console.log(`Worker ${worker.process.pid} died`);
+            
+                cluster.fork();
+                });
+            } else {
+                console.log('BASE DE DATOS CONECTADA')
+                app.listen(process.env.PORT || 3000, (err) => {
+                    if(!err){
+                        console.log(`Server listening port 3000 - Worker: ${process.pid}`)
+                    }else {
+                        console.log('Error al escuchar el puerto')
+                    }
+                })
+            }
         })
     }
 
