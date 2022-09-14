@@ -1,4 +1,4 @@
-const dotenv = require('dotenv')
+require('dotenv').config()
 const express = require('express')
 const session = require('express-session')
 const passport = require('passport')
@@ -18,7 +18,7 @@ const cpus = os.cpus();
 const port = Number(process.env.PORT) || 3000;
 const iscluster = process.argv[3] == "cluster";
 const logger = require('./config/winston.js')
-dotenv.config()
+
 
 app.engine(".hbs", exphbs({ extname: ".hbs", defaultLayout: "main.hbs" }));
 app.set("view engine", ".hbs");
