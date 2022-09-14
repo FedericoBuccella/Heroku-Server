@@ -15,7 +15,7 @@ const compression = require('compression')
 const os = require('os');
 const cluster = require("cluster");
 const cpus = os.cpus();
-const port = Number(process.argv[2]) || 8080;
+const port = Number(process.env.PORT) || 3000;
 const iscluster = process.argv[3] == "cluster";
 const logger = require('./config/winston.js')
 
