@@ -1,7 +1,7 @@
 # King of devs: Wooy
 
 
-![wooy  nuevo.jpeg](../_resources/wooy%20%20nuevo.jpeg)
+![wooy  nuevo.jpeg]((https://ipfs.io/ipfs/Qmb7mU9CiYr8dMNpUf1TZzapcZeNPHYaf6XzZ1aQRUU44U))
 
 
 #### En Wooy, tu ayuda se recompensa con un POD exclusivo (Proof of donation). Una pieza de arte unica diseñaba especialmente para ti.
